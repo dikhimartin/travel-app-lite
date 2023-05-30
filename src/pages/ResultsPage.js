@@ -17,9 +17,6 @@ const ResultsPage = () => {
     navigate("/");
   }, [navigate]);
 
-  const onHotelsTextClick = useCallback(() => {
-    // Please sync "Hotels Page" to the project
-  }, []);
 
   return (
     <div className="relative bg-primary-contrast w-full overflow-hidden flex flex-col items-start justify-start text-left text-base text-cornflowerblue-300 font-components-button-large">
@@ -45,15 +42,6 @@ const ResultsPage = () => {
               </div>
               <button className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-sm font-components-button-large text-cornflowerblue-200 text-left inline-block">
                 Search
-              </button>
-              <div
-                className="relative cursor-pointer"
-                onClick={onHotelsTextClick}
-              >
-                Hotels
-              </div>
-              <button className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-sm font-components-button-large text-darkslategray-200 text-left inline-block">
-                Offers
               </button>
             </div>
             <div className="flex flex-row items-center justify-center gap-[12px]">

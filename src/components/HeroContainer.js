@@ -4,6 +4,7 @@ import {
   Radio,
   Autocomplete,
   TextField,
+  RadioGroup,
   Icon,
 } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
@@ -91,18 +92,21 @@ const HeroContainer = () => {
                 </b>
                 <div className="flex flex-row items-center justify-start sm:w-full">
                   <div className="relative w-[216.53px] h-[38px] sm:w-[100%!important]">
-                    <FormControlLabel
-                      className="absolute top-[0px] left-[0px]"
-                      label="Return"
-                      labelPlacement="end"
-                      control={<Radio size="medium" />}
-                    />
-                    <FormControlLabel
-                      className="absolute top-[0px] left-[106px]"
-                      label="One-way"
-                      labelPlacement="end"
-                      control={<Radio color="primary" checked size="medium" />}
-                    />
+                    <RadioGroup
+                       defaultValue="one-way">
+                      <FormControlLabel 
+                        className="absolute top-[0px] left-[0px]"
+                        value="return" 
+                        control={<Radio />} 
+                        label="Return" 
+                      />
+                      <FormControlLabel 
+                        className="absolute top-[0px] left-[106px]"
+                        value="one-way" 
+                        control={<Radio />} 
+                        label="One-way" 
+                      />
+                    </RadioGroup>
                   </div>
                 </div>
               </div>
@@ -131,60 +135,30 @@ const HeroContainer = () => {
                     defaultValue="Singapore -  Changi (SIN)"
                     size="medium"
                   />
-                  <div className="self-stretch flex-1 flex flex-col items-start justify-start sm:flex-[unset] sm:self-stretch">
-                    <div className="self-stretch rounded box-border h-14 flex flex-col py-0 px-3 items-start justify-start border-[1px] border-solid border-gray-500">
-                      <div className="bg-primary-contrast h-0.5 flex flex-row py-0 px-1 box-border items-center justify-start">
-                        <div className="relative tracking-[0.15px] leading-[12px]">
-                          Arrival
-                        </div>
-                      </div>
-                      <div className="self-stretch overflow-hidden flex flex-row py-[15px] px-0 items-center justify-start gap-[8px] text-center text-dimgray-200">
-                        <div className="hidden flex-row items-start justify-start gap-[8px]">
-                          <div className="flex flex-col items-start justify-start">
-                            <div className="rounded-2xl bg-gainsboro-100 flex flex-row p-1 items-center justify-start">
-                              <div className="rounded-45xl bg-silver w-6 h-6 overflow-hidden shrink-0 hidden flex-row items-center justify-center">
-                                <div className="self-stretch flex-1 relative tracking-[0.4px] leading-[166%] flex items-center justify-center">
-                                  F
-                                </div>
-                              </div>
-                              <div className="flex flex-col py-[3px] px-1.5 items-start justify-start text-left text-smi text-gray-400">
-                                <div className="relative tracking-[0.16px] leading-[18px]">
-                                  Chip
-                                </div>
-                              </div>
-                              <img
-                                className="relative w-6 h-6 overflow-hidden shrink-0"
-                                alt=""
-                                src="/cancel2.svg"
-                              />
-                            </div>
-                          </div>
-                          <div className="flex flex-col items-start justify-start">
-                            <div className="rounded-2xl bg-gainsboro-100 flex flex-row p-1 items-center justify-start">
-                              <div className="rounded-45xl bg-silver w-6 h-6 overflow-hidden shrink-0 hidden flex-row items-center justify-center">
-                                <div className="self-stretch flex-1 relative tracking-[0.4px] leading-[166%] flex items-center justify-center">
-                                  F
-                                </div>
-                              </div>
-                              <div className="flex flex-col py-[3px] px-1.5 items-start justify-start text-left text-smi text-gray-400">
-                                <div className="relative tracking-[0.16px] leading-[18px]">
-                                  Chip
-                                </div>
-                              </div>
-                              <img
-                                className="relative w-6 h-6 overflow-hidden shrink-0"
-                                alt=""
-                                src="/cancel2.svg"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex-1 relative text-base tracking-[0.15px] leading-[24px] text-gray-400 text-left">
-                          Los Angeles (LA)
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <Autocomplete
+                    className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch"
+                    disablePortal
+                    options={[
+                      "Singapore (SIN)",
+                      "Sydney (SYD)",
+                      "Siem Reap (REP)",
+                      "Shanghai (PVG)",
+                      "Sanya (SYX)",
+                    ]}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        color="primary"
+                        label="Arrival"
+                        variant="outlined"
+                        placeholder=""
+                        helperText=""
+                      />
+                    )}
+                    defaultValue="Singapore -  Changi (SIN)"
+                    size="medium"
+                  />
+
                   <div className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch">
                     <DatePicker
                       label="Date"
