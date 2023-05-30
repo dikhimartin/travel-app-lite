@@ -5,8 +5,8 @@ import {
   useLocation,
 } from "react-router-dom";
 import Homepage from "./pages/Homepage";
-import ResultsPage from "./pages/ResultsPage";
 import List from "./pages/List";
+import ResultsPage from "./pages/ResultsPage";
 import { useEffect } from "react";
 
 function App() {
@@ -29,11 +29,11 @@ function App() {
         title = "";
         metaDescription = "";
         break;
-      case "/results-page":
+      case "/list":
         title = "";
         metaDescription = "";
         break;
-      case "/list":
+      case "/results-page":
         title = "";
         metaDescription = "";
         break;
@@ -56,8 +56,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Homepage />} />
-      <Route path="/results-page" element={<ResultsPage />} />
       <Route path="/list" element={<List />} />
+      <Route path="/results-page" element={<ResultsPage />} />
     </Routes>
   );
 }

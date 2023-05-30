@@ -53,9 +53,9 @@ module.exports = {
           "200": "#616161",
           "300": "#57575d",
         },
+        "action-hover": "rgba(0, 0, 0, 0.04)",
         royalblue: "#457eff",
         lightslategray: "#7e8b97",
-        "action-hover": "rgba(0, 0, 0, 0.04)",
       },
       fontFamily: {
         "components-button-large": "Roboto",
