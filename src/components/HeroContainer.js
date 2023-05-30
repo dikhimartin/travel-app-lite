@@ -21,10 +21,6 @@ const HeroContainer = () => {
     navigate("/results-page");
   }, [navigate]);
 
-  const onHotelsTextClick = useCallback(() => {
-    // Please sync "Hotels Page" to the project
-  }, []);
-
   const onSearchFlightsButtonClick = useCallback(() => {
     navigate("/results-page");
   }, [navigate]);
@@ -52,15 +48,7 @@ const HeroContainer = () => {
                 >
                   Search
                 </div>
-                <div
-                  className="relative cursor-pointer"
-                  onClick={onHotelsTextClick}
-                >
-                  Hotels
-                </div>
-                <button className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-sm font-components-button-large text-darkslategray-200 text-left inline-block">
-                  Offers
-                </button>
+               
               </div>
               <div className="flex flex-row items-center justify-center gap-[12px]">
                 <img
