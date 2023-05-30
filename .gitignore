@@ -1,0 +1,52 @@
+# Dependency directories
+/node_modules
+/.pnp
+.pnp.js
+
+# Built files
+/build
+/dist
+
+# Environment variables
+/.env
+/.env.local
+.env.local.*
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Cache and logs
+/.eslintcache
+/.eslintcache.*
+/.prettiercache
+/coverage
+/.log*
+.nyc_output
+/.cache
+/.yarn
+/yarn-error.log*
+
+# Editor and IDE files
+.idea
+.vscode
+*.sublime-*
+*.swp
+*~
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+test-report.xml
+
+# OS and editor generated files
+.DS_Store
+Thumbs.db
+*.bak
+*.tmp
+
+# Generated build files
+*.js
+*.jsx
+*.json
+*.css
+*.map
