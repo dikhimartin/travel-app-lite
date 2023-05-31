@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import axios from 'axios';
 
-const AirportAutosuggest = () => {
+const AirportAutosuggest = ({ value, onChange, label }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   // const [loading, setLoading] = useState(false);
@@ -55,7 +55,7 @@ const AirportAutosuggest = () => {
         <TextField
           {...params}
           color="primary"
-          label="Departure"
+          label={label}
           variant="outlined"
           placeholder=""
           helperText=""
@@ -63,7 +63,11 @@ const AirportAutosuggest = () => {
         />
       )}
       value={searchQuery}
-      onChange={(event, value) => setSearchQuery(value)}
+      onChange={(_, newValue) => {
+        setSearchQuery(newValue);
+        const airportCode = newValue?.split(' - ')[0]; // Extracting airport code from the selected value
+        onChange(airportCode);
+      }}
       size="medium"
     />
   );

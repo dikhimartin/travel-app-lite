@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect } from "react";
 import {
   FormControlLabel,
   Radio,
-  Autocomplete,
   TextField,
   RadioGroup,
 } from "@mui/material";
@@ -17,8 +16,8 @@ const HeroContainer = () => {
   const api = new Api()
 
   const [form, setForm] = useState({
-    departure: "Singapore (SIN)",
-    arrival: "Singapore (SIN)",
+    departure: "",
+    arrival: "",
     departure_date: new Date(),
     trip_type: "one-way",
   });
@@ -30,20 +29,6 @@ const HeroContainer = () => {
       departure_date: form.departure_date,
       trip_type: form.trip_type,
     };
-
-    // const { data } =  api.get(`/integration/city/airport`)
-    // console.log(data);
-    
-    // axios.get('https://api.example.com/data')
-    // .then(response => {
-    //   // Handle the response data
-    //   console.log(response.data);
-    // })
-    // .catch(error => {
-    //   // Handle any errors
-    //   console.error(error);
-    // });
-
     console.log(JSON.stringify(raw));
     // navigate(`/results-page/`);
   }, [form, navigate]);
@@ -96,60 +81,18 @@ const HeroContainer = () => {
           
           <div className="self-stretch flex flex-row items-start justify-start text-xs text-gray-300 md:flex-col">
             <div className="flex-1 flex flex-row p-[5px] items-start justify-start gap-[10px] md:w-full md:flex-[unset] md:self-stretch sm:flex-col">
-              <AirportAutosuggest />
-            </div>
-          </div>
-
-          {/* <div className="self-stretch flex flex-row items-start justify-start text-xs text-gray-300 md:flex-col">
-            <div className="flex-1 flex flex-row p-[5px] items-start justify-start gap-[10px] md:w-full md:flex-[unset] md:self-stretch sm:flex-col">
-            <Autocomplete
-              className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch"
-              disablePortal
-              options={[
-                "Singapore (SIN)",
-                "Sydney (SYD)",
-                "Siem Reap (REP)",
-                "Shanghai (PVG)",
-                "Sanya (SYX)",
-              ]}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  color="primary"
+              <AirportAutosuggest
+                  value={form.departure}
+                  onChange={(value) => handleChange({ target: { name: "departure", value } })}
                   label="Departure"
-                  variant="outlined"
-                  placeholder=""
-                  helperText=""
                 />
-              )}
-              value={form.departure}
-              onChange={(event, value) => handleChange({ target: { name: "departure", value } })}
-              size="medium"
-            />
-            <Autocomplete
-              className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch"
-              disablePortal
-              options={[
-                "Singapore (SIN)",
-                "Sydney (SYD)",
-                "Siem Reap (REP)",
-                "Shanghai (PVG)",
-                "Sanya (SYX)",
-              ]}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  color="primary"
-                  label="Arrival"
-                  variant="outlined"
-                  placeholder=""
-                  helperText=""
-                />
-              )}
-              value={form.arrival}
-              onChange={(event, value) => handleChange({ target: { name: "arrival", value } })}              
-              size="medium"
-            />
+
+              <AirportAutosuggest
+                value={form.arrival}
+                onChange={(value) => handleChange({ target: { name: "arrival", value } })}
+                label="Arrival"
+              />
+           
               <div className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch">
                 <DatePicker
                   label="Departure Date"
@@ -178,7 +121,7 @@ const HeroContainer = () => {
                 </div>
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
     </LocalizationProvider>
