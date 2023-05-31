@@ -2,7 +2,7 @@ import FlightContainer from "./FlightContainer";
 
 const FlightInfoContainer = () => {
   return (
-    <div className="flex-1 flex flex-col items-start justify-start gap-[12px] text-left text-lg text-dimgray-300 font-components-button-large md:flex-[unset] md:self-stretch">
+    <div className="md:mt-10 flex-1 flex flex-col items-start justify-start gap-[12px] text-left text-lg text-dimgray-300 font-components-button-large md:flex-[unset] md:self-stretch">
       <div className="relative tracking-[0.26px] text-lightslategray">
         10 out of 177 Results
       </div>

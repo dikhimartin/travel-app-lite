@@ -9,7 +9,7 @@ const SearchFormSectionContainer = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div className="self-stretch [background:linear-gradient(100.3deg,_#114f8b,_#2a9ad7)] flex flex-col items-start justify-start text-left text-42xl text-primary-contrast font-baloo-bhai">
+      <div className="md:mb-10 self-stretch [background:linear-gradient(100.3deg,_#114f8b,_#2a9ad7)] flex flex-col items-start justify-start text-left text-42xl text-primary-contrast font-baloo-bhai">
         <div className="self-stretch relative h-[362px] sm:h-[480px]">
           <div className="absolute h-full w-full top-[0px] right-[0px] bottom-[0px] left-[0px] [background:linear-gradient(78.78deg,_#114f8b_5.2%,_#2a9ad7)]" />
           <img
