@@ -9,14 +9,17 @@ import {
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useNavigate } from "react-router-dom";
+import Api from "../config/api"
+
 
 const HeroContainer = () => {
   const navigate = useNavigate();
+  const api = new Api()
 
   const [form, setForm] = useState({
     departure: "Singapore (SIN)",
     arrival: "Singapore (SIN)",
-    date: new Date(),
+    departure_date: new Date(),
     trip_type: "one-way",
   });
 
@@ -24,10 +27,25 @@ const HeroContainer = () => {
     const raw = {
       departure: form.departure,
       arrival: form.arrival,
-      date: form.date,
+      departure_date: form.departure_date,
       trip_type: form.trip_type,
     };
-    navigate(`/results-page/`);
+
+    const { data } =  api.get(`/integration/city/airport`)
+    console.log(data);
+    
+    // axios.get('https://api.example.com/data')
+    // .then(response => {
+    //   // Handle the response data
+    //   console.log(response.data);
+    // })
+    // .catch(error => {
+    //   // Handle any errors
+    //   console.error(error);
+    // });
+
+    console.log(JSON.stringify(raw));
+    // navigate(`/results-page/`);
   }, [form, navigate]);
 
   const handleChange = useCallback((event) => {
@@ -127,9 +145,9 @@ const HeroContainer = () => {
             />
               <div className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch">
                 <DatePicker
-                  label="Date"
-                  value={form.date}
-                  onChange={(date) => handleChange({ target: { name: "date", value: date } })}                  
+                  label="Departure Date"
+                  value={form.departure_date}
+                  onChange={(departure_date) => handleChange({ target: { name: "departure_date", value: departure_date } })}                  
                   renderInput={(params) => (
                     <TextField
                       {...params}
