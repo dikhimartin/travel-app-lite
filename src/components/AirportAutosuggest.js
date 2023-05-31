@@ -9,10 +9,12 @@ const AirportAutosuggest = () => {
 
   useEffect(() => {
     const delayTimer = setTimeout(() => {
-      if (searchQuery.length > 0) {
-        fetchSuggestions();
-      } else {
-        setSuggestions([]);
+      if(searchQuery){
+        if (searchQuery.length > 0) {
+          fetchSuggestions();
+        } else {
+          setSuggestions([]);
+        }
       }
     }, 1000);
 
