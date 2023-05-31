@@ -10,7 +10,7 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useNavigate } from "react-router-dom";
 import Api from "../config/api"
-
+import AirportAutosuggest from '../components/AirportAutosuggest';
 
 const HeroContainer = () => {
   const navigate = useNavigate();
@@ -31,8 +31,8 @@ const HeroContainer = () => {
       trip_type: form.trip_type,
     };
 
-    const { data } =  api.get(`/integration/city/airport`)
-    console.log(data);
+    // const { data } =  api.get(`/integration/city/airport`)
+    // console.log(data);
     
     // axios.get('https://api.example.com/data')
     // .then(response => {
@@ -93,7 +93,14 @@ const HeroContainer = () => {
               </div>
             </div>
           </div>
+          
           <div className="self-stretch flex flex-row items-start justify-start text-xs text-gray-300 md:flex-col">
+            <div className="flex-1 flex flex-row p-[5px] items-start justify-start gap-[10px] md:w-full md:flex-[unset] md:self-stretch sm:flex-col">
+              <AirportAutosuggest />
+            </div>
+          </div>
+
+          {/* <div className="self-stretch flex flex-row items-start justify-start text-xs text-gray-300 md:flex-col">
             <div className="flex-1 flex flex-row p-[5px] items-start justify-start gap-[10px] md:w-full md:flex-[unset] md:self-stretch sm:flex-col">
             <Autocomplete
               className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch"
@@ -171,7 +178,7 @@ const HeroContainer = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </LocalizationProvider>
