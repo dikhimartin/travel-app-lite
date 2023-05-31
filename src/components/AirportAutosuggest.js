@@ -16,33 +16,34 @@ const AirportAutosuggest = () => {
           setSuggestions([]);
         }
       }
-    }, 1000);
+    }, 0);
 
     return () => clearTimeout(delayTimer);
   }, [searchQuery]);
 
   const fetchSuggestions = async () => {
     try {
-      // setLoading(true);
-      const response = await axios.get(
-        `https://api.api-ninjas.com/v1/airports?iata=${searchQuery}`,
+      const response = await axios.post(
+        'http://localhost:7700/indexes/airport/search',
         {
-          headers: {
-            'X-Api-Key': '8+f7J88ENto6mLMTkQmW+A==Qxlxc5nmAOi8Gf9t'
-          }
+          q: searchQuery,
+          facets: [],
+          attributesToHighlight: ['*'],
+          highlightPreTag: '<ais-highlight-0000000000>',
+          highlightPostTag: '</ais-highlight-0000000000>',
+          limit: 21,
+          offset: 0
         }
       );
-      setSuggestions(response.data.map((airport) => `${airport.name} (${airport.iata})`));
+      setSuggestions(response.data.hits.map((hit) => `${hit.airportCode} - ${hit.airportName}`));
     } catch (error) {
       console.error('Error fetching airport suggestions:', error);
       setSuggestions([]);
-    } finally {
-      // setLoading(false);
     }
   };
 
-  const handleInputChange = (event, value) => {
-    setSearchQuery(value);
+  const handleInputChange = (event) => {
+    setSearchQuery(event.target.value);
   };
 
   return (
@@ -58,7 +59,7 @@ const AirportAutosuggest = () => {
           variant="outlined"
           placeholder=""
           helperText=""
-          onChange={(event) => handleInputChange(event, event.target.value)}
+          onChange={handleInputChange}
         />
       )}
       value={searchQuery}
