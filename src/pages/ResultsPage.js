@@ -38,7 +38,7 @@ const ResultsPage = () => {
                 className="relative cursor-pointer"
                 onClick={onExploreTextClick}
               >
-                Explore
+                Home
               </div>
               <button className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-sm font-components-button-large text-cornflowerblue-200 text-left inline-block">
                 Search

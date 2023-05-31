@@ -27,8 +27,7 @@ const HeroContainer = () => {
       date: form.date,
       trip_type: form.trip_type,
     };
-    console.log(raw);
-    // navigate(`/results-page/`);
+    navigate(`/results-page/`);
   }, [form, navigate]);
 
   const handleChange = useCallback((event) => {
