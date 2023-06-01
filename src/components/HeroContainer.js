@@ -88,7 +88,7 @@ const HeroContainer = () => {
     for (let i = 0; i < count; i++) {
       updatedTravellers.push({
         first_name: "Unknown",
-        is_guest: false,
+        is_guest: true,
         passenger_type: passengerType,
       });
     }
