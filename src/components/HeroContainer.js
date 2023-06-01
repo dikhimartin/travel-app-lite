@@ -1,26 +1,32 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import {
   FormControlLabel,
   Radio,
   TextField,
   RadioGroup,
+  Box, 
+  Typography, 
+  Button
 } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useNavigate } from "react-router-dom";
 import Api from "../config/api"
 import AirportAutosuggest from '../components/AirportAutosuggest';
+import PassengerInput from '../components/PassengerInput';
 
 const HeroContainer = () => {
   const navigate = useNavigate();
   const api = new Api()
-
+  
+  const [isReturnDateVisible, setReturnDateVisible] = useState(false);
   const [form, setForm] = useState({
     departure_airport_code: "",
     arrival_airport_code: "",
     departure_date: new Date().toISOString().split("T")[0],
     return_date: new Date().toISOString().split("T")[0],
     trip_type: "Oneway",
+    travellers: [],
   });
 
   const onSearchFlightsButtonClick = useCallback(() => {
@@ -38,22 +44,25 @@ const HeroContainer = () => {
 
   const handleChange = useCallback((event) => {
     const { name, value } = event.target;
-  
+    
+    if (name === "trip_type") {
+      setReturnDateVisible(value === "Roundtrip");
+    } 
     if (name === "departure_date" || name === "return_date") {
-      // Handle date changes
-      const formattedDate = value.toISOString().split("T")[0];
-  
-      setForm((prevForm) => ({
-        ...prevForm,
-        [name]: formattedDate,
-      }));
+      if(value != null){
+        // Handle date changes
+        const formattedDate = value.toISOString().split("T")[0];
+        setForm((prevForm) => ({
+          ...prevForm,
+          [name]: formattedDate,
+        }));
+      }
     } else {
       // Handle other input changes
       setForm((prevForm) => ({ ...prevForm, [name]: value }));
     }
   }, []);
-  
-  
+
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -127,24 +136,35 @@ const HeroContainer = () => {
                   )}
                 />
               </div>
-              <div className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch">
-                <DatePicker
-                  label="Return Date"
-                  value={form.return_date ? new Date(form.return_date) : null}
-                  onChange={(return_date) => handleChange({ target: { name: "return_date", value: return_date } })}                  
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      color="primary"
-                      variant="outlined"
-                      size="medium"
-                      helperText=""
-                      fullWidth
-                    />
-                  )}
-                />
-              </div>
+              {isReturnDateVisible && (
+                <div className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch">
+                  <DatePicker
+                    label="Return Date"
+                    value={form.return_date ? new Date(form.return_date) : null}
+                    onChange={(return_date) =>
+                      handleChange({ target: { name: "return_date", value: return_date } })
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        color="primary"
+                        variant="outlined"
+                        size="medium"
+                        helperText=""
+                        fullWidth
+                      />
+                    )}
+                  />
+                </div>
+              )}
+
+              {/* <div className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch">
+                  <PassengerInput/>
+              </div> */}
             </div>
+          </div>
+
+          <div className="self-stretch flex flex-row items-start justify-start text-xs text-gray-300 md:flex-col">
             <div className="flex flex-col p-[5px] items-center justify-center text-center text-mini text-primary-contrast md:w-full md:text-left">
               <div
                 className="rounded bg-orange-200 w-[164px] h-14 overflow-hidden shrink-0 flex flex-col items-center justify-center [transition:0.3s] cursor-pointer hover:bg-darkorange md:mr-[auto] sm:w-[100%!important]"
