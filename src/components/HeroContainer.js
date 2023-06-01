@@ -11,15 +11,16 @@ import {
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useNavigate } from "react-router-dom";
-import Api from "../config/api"
 import AirportAutosuggest from '../components/AirportAutosuggest';
 import PassengerInput from '../components/PassengerInput';
+// import Api from "../config/api"
 
 const HeroContainer = () => {
   const navigate = useNavigate();
-  const api = new Api()
+  // const api = new Api()
   
   const [isReturnDateVisible, setReturnDateVisible] = useState(false);
+  const [isSelectpassengerVisible, setSelectpassengerVisible] = useState(false);
   const [form, setForm] = useState({
     departure_airport_code: "",
     arrival_airport_code: "",
@@ -44,9 +45,9 @@ const HeroContainer = () => {
 
   const handleChange = useCallback((event) => {
     const { name, value } = event.target;
-    
     if (name === "trip_type") {
       setReturnDateVisible(value === "Roundtrip");
+      setSelectpassengerVisible(false);
     } 
     if (name === "departure_date" || name === "return_date") {
       if(value != null){
@@ -63,6 +64,11 @@ const HeroContainer = () => {
     }
   }, []);
 
+  const handleTextFieldClick = () => {
+    setSelectpassengerVisible(true);
+  };
+
+  const isMobileScreen = window.innerWidth <= 600;
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -158,11 +164,28 @@ const HeroContainer = () => {
                 </div>
               )}
 
-              {/* <div className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch">
-                  <PassengerInput/>
-              </div> */}
+              <TextField 
+                label="Select Passenger" 
+                style={{ width: isMobileScreen ? '100%' : 'auto' }}
+                InputProps={{
+                  readOnly: true,
+                }} 
+                onClick={handleTextFieldClick}
+              />
             </div>
           </div>
+
+          {isSelectpassengerVisible && (
+            <div className="self-stretch overflow-hidden flex flex-row p-[5px] items-center justify-start gap-[5px] sm:flex-col sm:items-start">
+              <div className="flex-1 relative tracking-[0.04em] uppercase sm:w-full sm:pb-2.5 sm:mb-1.5 sm:[border-bottom:1px] sm:[border-bottom-style:solid] sm:border-b-whitesmoke-0 sm:flex-[unset] sm:self-stretch">
+              </div>
+              <div className="flex flex-row items-center justify-start sm:w-full">
+                <div className="relative  sm:w-[100%!important]">
+                    <PassengerInput/>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="self-stretch flex flex-row items-start justify-start text-xs text-gray-300 md:flex-col">
             <div className="flex flex-col p-[5px] items-center justify-center text-center text-mini text-primary-contrast md:w-full md:text-left">
