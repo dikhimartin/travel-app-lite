@@ -16,27 +16,44 @@ const HeroContainer = () => {
   const api = new Api()
 
   const [form, setForm] = useState({
-    departure: "",
-    arrival: "",
-    departure_date: new Date(),
-    trip_type: "one-way",
+    departure_airport_code: "",
+    arrival_airport_code: "",
+    departure_date: new Date().toISOString().split("T")[0],
+    return_date: new Date().toISOString().split("T")[0],
+    trip_type: "Oneway",
   });
 
   const onSearchFlightsButtonClick = useCallback(() => {
     const raw = {
-      departure: form.departure,
-      arrival: form.arrival,
+      departure_airport_code: form.departure_airport_code,
+      arrival_airport_code: form.arrival_airport_code,
       departure_date: form.departure_date,
+      return_date: form.return_date,
       trip_type: form.trip_type,
     };
-    console.log(JSON.stringify(raw));
+    console.log(raw);
+    // console.log(JSON.stringify());
     // navigate(`/results-page/`);
   }, [form, navigate]);
 
   const handleChange = useCallback((event) => {
     const { name, value } = event.target;
-    setForm((prevForm) => ({ ...prevForm, [name]: value }));
+  
+    if (name === "departure_date" || name === "return_date") {
+      // Handle date changes
+      const formattedDate = value.toISOString().split("T")[0];
+  
+      setForm((prevForm) => ({
+        ...prevForm,
+        [name]: formattedDate,
+      }));
+    } else {
+      // Handle other input changes
+      setForm((prevForm) => ({ ...prevForm, [name]: value }));
+    }
   }, []);
+  
+  
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -59,21 +76,21 @@ const HeroContainer = () => {
             <div className="flex flex-row items-center justify-start sm:w-full">
               <div className="relative w-[216.53px] h-[38px] sm:w-[100%!important]">
                 <RadioGroup
-                    defaultValue="one-way"
+                    defaultValue="Oneway"
                     value={form.trip_type}
                     onChange={(event, value) => handleChange({ target: { name: "trip_type", value } })} >                 
-                  <FormControlLabel 
-                    value="return"
-                    className="absolute top-[0px] left-[0px]"
-                    control={<Radio />} 
-                    label="Return" 
+                    <FormControlLabel 
+                      value="Oneway"
+                      className="absolute top-[0px] left-[0px]"
+                      control={<Radio />} 
+                      label="One-way" 
                     />
-                  <FormControlLabel 
-                    value="one-way"
-                    className="absolute top-[0px] left-[106px]"
-                    control={<Radio />} 
-                    label="One-way" 
-                  />
+                    <FormControlLabel 
+                      value="Roundtrip"
+                      className="absolute top-[0px] left-[106px]"
+                      control={<Radio />} 
+                      label="Roundtrip" 
+                    />
                 </RadioGroup>
               </div>
             </div>
@@ -82,22 +99,39 @@ const HeroContainer = () => {
           <div className="self-stretch flex flex-row items-start justify-start text-xs text-gray-300 md:flex-col">
             <div className="flex-1 flex flex-row p-[5px] items-start justify-start gap-[10px] md:w-full md:flex-[unset] md:self-stretch sm:flex-col">
               <AirportAutosuggest
-                  value={form.departure}
-                  onChange={(value) => handleChange({ target: { name: "departure", value } })}
+                  value={form.departure_airport_code}
+                  onChange={(value) => handleChange({ target: { name: "departure_airport_code", value } })}
                   label="Departure"
                 />
 
               <AirportAutosuggest
-                value={form.arrival}
-                onChange={(value) => handleChange({ target: { name: "arrival", value } })}
+                value={form.arrival_airport_code}
+                onChange={(value) => handleChange({ target: { name: "arrival_airport_code", value } })}
                 label="Arrival"
               />
            
               <div className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch">
                 <DatePicker
                   label="Departure Date"
-                  value={form.departure_date}
+                  value={form.departure_date ? new Date(form.departure_date) : null}
                   onChange={(departure_date) => handleChange({ target: { name: "departure_date", value: departure_date } })}                  
+                  renderInput={(params) => (
+                    <TextField
+                    {...params}
+                      color="primary"
+                      variant="outlined"
+                      size="medium"
+                      helperText=""
+                      fullWidth
+                    />
+                  )}
+                />
+              </div>
+              <div className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch">
+                <DatePicker
+                  label="Return Date"
+                  value={form.return_date ? new Date(form.return_date) : null}
+                  onChange={(return_date) => handleChange({ target: { name: "return_date", value: return_date } })}                  
                   renderInput={(params) => (
                     <TextField
                       {...params}

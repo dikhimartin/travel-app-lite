@@ -35,7 +35,7 @@ const AirportAutosuggest = ({ value, onChange, label }) => {
           offset: 0
         }
       );
-      setSuggestions(response.data.hits.map((hit) => `${hit.airportCode} - ${hit.airportName}`));
+      setSuggestions(response.data.hits.map((hit) => `${hit.airportCode} - ${hit.airportName} (${hit.cityName}, ${hit.countryName})`));
     } catch (error) {
       console.error('Error fetching airport suggestions:', error);
       setSuggestions([]);
