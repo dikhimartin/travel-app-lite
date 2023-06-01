@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
   FormControlLabel,
   Radio,
@@ -18,9 +18,17 @@ import PassengerInput from '../components/PassengerInput';
 const HeroContainer = () => {
   const navigate = useNavigate();
   // const api = new Api()
-  
   const [isReturnDateVisible, setReturnDateVisible] = useState(false);
-  const [isSelectpassengerVisible, setSelectpassengerVisible] = useState(false);
+  const [isTooltipVisible, setTooltipVisible] = useState(false);
+  const tooltipRef = useRef(null);
+
+  useEffect(() => {
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, []);  
+
   const [form, setForm] = useState({
     departure_airport_code: "",
     arrival_airport_code: "",
@@ -37,6 +45,7 @@ const HeroContainer = () => {
       departure_date: form.departure_date,
       return_date: form.return_date,
       trip_type: form.trip_type,
+      travellers: form.travellers,
     };
     console.log(raw);
     // console.log(JSON.stringify());
@@ -47,7 +56,6 @@ const HeroContainer = () => {
     const { name, value } = event.target;
     if (name === "trip_type") {
       setReturnDateVisible(value === "Roundtrip");
-      setSelectpassengerVisible(false);
     } 
     if (name === "departure_date" || name === "return_date") {
       if(value != null){
@@ -64,15 +72,55 @@ const HeroContainer = () => {
     }
   }, []);
 
-  const handleTextFieldClick = () => {
-    setSelectpassengerVisible(true);
+  const toggleTooltip = () => {
+    setTooltipVisible(true);
+  };
+  
+  const handleOutsideClick = (event) => {
+    if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+      setTooltipVisible(false);
+    }
+  };
+  
+  const handlePassengerChange = (passengerType, count) => {
+    const updatedTravellers = form.travellers.filter((traveller) => traveller.passenger_type !== passengerType);
+  
+    for (let i = 0; i < count; i++) {
+      updatedTravellers.push({
+        first_name: "Unknown",
+        is_guest: false,
+        passenger_type: passengerType,
+      });
+    }
+  
+    setForm((prevForm) => ({
+      ...prevForm,
+      travellers: updatedTravellers,
+    }));
   };
 
-  const isMobileScreen = window.innerWidth <= 600;
-
+  const getPassengerCount = () => {
+    const passengerCount = {};
+  
+    form.travellers.forEach((traveller) => {
+      passengerCount[traveller.passenger_type] = (passengerCount[traveller.passenger_type] || 0) + 1;
+    });
+  
+    let totalCount = "";
+    Object.keys(passengerCount).forEach((passengerType, index) => {
+      totalCount += `${passengerCount[passengerType]} ${passengerType}`;
+  
+      if (index !== Object.keys(passengerCount).length - 1) {
+        totalCount += ", ";
+      }
+    });
+  
+    return totalCount;
+  };
+  
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div className="self-stretch flex flex-col items-center justify-start text-center text-42xl text-primary-contrast font-baloo-bhai">
+      <div className="self-stretch flex flex-col items-center justify-start text-center text-42xl text-primary-contrast font-baloo-bhai" >
         <div className="self-stretch relative h-[640px]">
           <div className="absolute w-full top-[0px] right-[0px] left-[0px] [background:linear-gradient(78.78deg,_#114f8b_5.2%,_#2a9ad7)] h-[639.91px]" />
           <img
@@ -164,28 +212,25 @@ const HeroContainer = () => {
                 </div>
               )}
 
-              <TextField 
-                label="Select Passenger" 
-                style={{ width: isMobileScreen ? '100%' : 'auto' }}
-                InputProps={{
-                  readOnly: true,
-                }} 
-                onClick={handleTextFieldClick}
-              />
+              <div onClick={toggleTooltip} className={`tooltip ${isTooltipVisible ? 'active' : ''}`} ref={tooltipRef}>
+                <TextField
+                  label="Select Passenger"
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  value={`${getPassengerCount()} PAX`}
+                />
+                <div className="content">
+                  <PassengerInput form={form} handlePassengerChange={handlePassengerChange} />
+                  <i></i>
+                </div>
+              </div>
+             
+
             </div>
           </div>
 
-          {isSelectpassengerVisible && (
-            <div className="self-stretch overflow-hidden flex flex-row p-[5px] items-center justify-start gap-[5px] sm:flex-col sm:items-start">
-              <div className="flex-1 relative tracking-[0.04em] uppercase sm:w-full sm:pb-2.5 sm:mb-1.5 sm:[border-bottom:1px] sm:[border-bottom-style:solid] sm:border-b-whitesmoke-0 sm:flex-[unset] sm:self-stretch">
-              </div>
-              <div className="flex flex-row items-center justify-start sm:w-full">
-                <div className="relative  sm:w-[100%!important]">
-                    <PassengerInput/>
-                </div>
-              </div>
-            </div>
-          )}
+
 
           <div className="self-stretch flex flex-row items-start justify-start text-xs text-gray-300 md:flex-col">
             <div className="flex flex-col p-[5px] items-center justify-center text-center text-mini text-primary-contrast md:w-full md:text-left">
