@@ -1,11 +1,13 @@
 import { useMemo } from "react";
 
 const FlightContainer = ({
-  turkish,
-  singaporeAirlines,
-  aM,
+  airlineIcon,
+  airlineName,
+  departureAirport,
+  arrivalAirport,
+  departureDate,
+  arrivalDate,
   h55MNonStop,
-  aM1,
   s730,
   propTransform,
 }) => {
@@ -21,18 +23,18 @@ const FlightContainer = ({
         <img
           className="relative w-[34.77px] h-[46px] sm:[transform:scale(0.8)]"
           alt=""
-          src={turkish}
+          src={airlineIcon}
           style={turkishIconStyle}
         />
-        <div className="relative tracking-[0.26px]">{singaporeAirlines}</div>
+        <div className="relative tracking-[0.26px]">{airlineName}</div>
       </div>
       <div className="flex-1 flex flex-row items-center justify-between text-2xl text-cornflowerblue-200 sm:flex-[unset] sm:self-stretch">
         <div className="relative w-[93px] h-[52px] mq428small:w-20">
           <div className="absolute w-full top-[0%] left-[0%] tracking-[0.32px] font-medium inline-block mq428small:text-base">
-            {aM}
+            {departureDate}
           </div>
           <div className="absolute w-[79.51%] top-[63.46%] left-[0%] text-base tracking-[0.26px] text-dimgray-100 inline-block mq428small:text-base">
-            SIN
+            {departureAirport}
           </div>
         </div>
         <div className="relative w-[121px] h-[55px] text-center text-base text-gray-100 sm:[transform:scale(0.9)]">
@@ -47,10 +49,10 @@ const FlightContainer = ({
         </div>
         <div className="relative w-[91px] h-[52px] text-right mq428small:w-20">
           <div className="absolute w-full top-[0%] left-[0%] tracking-[0.32px] font-medium inline-block mq428small:text-base">
-            {aM1}
+            {arrivalDate}
           </div>
           <div className="absolute w-[81.25%] top-[63.46%] left-[17.65%] text-base tracking-[0.26px] text-dimgray-100 inline-block mq428small:text-base">
-            LAX
+            {arrivalAirport}
           </div>
         </div>
       </div>
