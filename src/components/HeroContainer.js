@@ -13,7 +13,7 @@ const HeroContainer = () => {
             />
         </div>
       </div>
-      <SearchFormSectionContainer/>     
+      <SearchFormSectionContainer titletext="Search Flight" />
      </>
   );
 };

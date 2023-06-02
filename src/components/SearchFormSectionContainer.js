@@ -13,7 +13,7 @@ import AirportAutosuggest from '../components/AirportAutosuggest';
 import PassengerInput from '../components/PassengerInput';
 // import Api from "../config/api"
 
-const SearchFormSectionContainer = () => {
+const SearchFormSectionContainer = ({ titletext }) => {
     // const api = new Api()
     const navigate = useNavigate();
     const [errorVisible, setErrorVisible] = useState(false);
@@ -198,7 +198,7 @@ const SearchFormSectionContainer = () => {
           <div className="self-stretch rounded-3xs bg-primary-contrast flex flex-col p-5 items-start justify-start gap-[4px] text-left text-xl text-darkslategray-300 font-components-button-large md:flex-col sm:mt-5">
             <div className="self-stretch overflow-hidden flex flex-row p-[5px] items-center justify-start gap-[5px] sm:flex-col sm:items-start">
               <b className="flex-1 relative tracking-[0.04em] uppercase sm:w-full sm:pb-2.5 sm:mb-1.5 sm:[border-bottom:1px] sm:[border-bottom-style:solid] sm:border-b-whitesmoke-0 sm:flex-[unset] sm:self-stretch">
-                Search flights
+                {titletext}
               </b>
               <div className="flex flex-row items-center justify-start sm:w-full">
                 <div className="relative w-[216.53px] h-[38px] sm:w-[100%!important]">
@@ -225,26 +225,49 @@ const SearchFormSectionContainer = () => {
             
             <div className="self-stretch flex flex-row items-start justify-start text-xs text-gray-300 md:flex-col">
               <div className="flex-1 flex flex-row p-[5px] items-start justify-start gap-[10px] md:w-full md:flex-[unset] md:self-stretch sm:flex-col">
+                
                 <AirportAutosuggest
                     value={form.departure_airport_code}
+                    className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch mb-3"
                     onChange={(value) => handleChange({ target: { name: "departure_airport_code", value } })}
                     label="Departure"
-                  />
+                    />
 
                 <AirportAutosuggest
                   value={form.arrival_airport_code}
+                  className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch mb-3"
                   onChange={(value) => handleChange({ target: { name: "arrival_airport_code", value } })}
                   label="Arrival"
                 />
             
-                <div className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch">
+                <DatePicker
+                  label="Departure Date"
+                  className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch mb-3"
+                  value={form.departure_date ? new Date(form.departure_date) : null}
+                  onChange={(departure_date) => handleChange({ target: { name: "departure_date", value: departure_date } })}                  
+                  renderInput={(params) => (
+                    <TextField
+                    {...params}
+                      color="primary"
+                      variant="outlined"
+                      size="medium"
+                      helperText=""
+                      fullWidth
+                    />
+                  )}
+                />
+
+                {isReturnDateVisible && (
                   <DatePicker
-                    label="Departure Date"
-                    value={form.departure_date ? new Date(form.departure_date) : null}
-                    onChange={(departure_date) => handleChange({ target: { name: "departure_date", value: departure_date } })}                  
+                    label="Return Date"
+                    className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch mb-3"
+                    value={form.return_date ? new Date(form.return_date) : null}
+                    onChange={(return_date) =>
+                      handleChange({ target: { name: "return_date", value: return_date } })
+                    }
                     renderInput={(params) => (
                       <TextField
-                      {...params}
+                        {...params}
                         color="primary"
                         variant="outlined"
                         size="medium"
@@ -253,32 +276,12 @@ const SearchFormSectionContainer = () => {
                       />
                     )}
                   />
-                </div>
-                {isReturnDateVisible && (
-                  <div className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch">
-                    <DatePicker
-                      label="Return Date"
-                      value={form.return_date ? new Date(form.return_date) : null}
-                      onChange={(return_date) =>
-                        handleChange({ target: { name: "return_date", value: return_date } })
-                      }
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          color="primary"
-                          variant="outlined"
-                          size="medium"
-                          helperText=""
-                          fullWidth
-                        />
-                      )}
-                    />
-                  </div>
                 )}
 
                 <div onClick={toggleTooltip} className={`tooltip ${isTooltipVisible ? 'active' : ''}`} ref={tooltipRef}>
                   <TextField
                     label="Select Passenger"
+                    className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch mb-3"
                     InputProps={{
                       readOnly: true,
                     }}
@@ -289,7 +292,6 @@ const SearchFormSectionContainer = () => {
                     <i></i>
                   </div>
                 </div>
-              
 
               </div>
             </div>

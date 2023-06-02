@@ -72,7 +72,7 @@ const ResultsPage = () => {
             alt=""
             src="/banner-background1@2x.png"
           />
-          <SearchFormSectionContainer />
+          <SearchFormSectionContainer titletext="Where are you off too?" />
         </div>
       </div>
 

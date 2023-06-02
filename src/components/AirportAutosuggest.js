@@ -48,7 +48,7 @@ const AirportAutosuggest = ({ value, onChange, label }) => {
 
   return (
     <Autocomplete
-      className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch"
+      className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch mb-3"
       disablePortal
       options={suggestions}
       renderInput={(params) => (
