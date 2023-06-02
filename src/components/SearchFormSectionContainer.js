@@ -169,6 +169,7 @@ const SearchFormSectionContainer = ({ titletext }) => {
           arrival_airport_code: form.arrival_airport_code,
           arrival_city_code: form.arrival_airport_code,
           departure_date: form.departure_date,
+          return_date: form.return_date,
         },
       ],
       is_personal_trip: false,
@@ -181,8 +182,8 @@ const SearchFormSectionContainer = ({ titletext }) => {
       third_party: ["SQ"],
     };
 
-    const { data } = await api.post("integration/flight/search", payload);
-    navigate(`/results-page/?session=${data.session_id}`);
+    // const { data } = await api.post("integration/flight/search", payload);
+    // navigate(`/results-page/?session=${data.session_id}`);
   }
   
 
