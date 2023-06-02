@@ -4,9 +4,7 @@ import {
   Radio,
   TextField,
   RadioGroup,
-  Box, 
-  Typography, 
-  Button
+  Alert
 } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -16,8 +14,9 @@ import PassengerInput from '../components/PassengerInput';
 // import Api from "../config/api"
 
 const HeroContainer = () => {
-  const navigate = useNavigate();
   // const api = new Api()
+  const navigate = useNavigate();
+  const [errorVisible, setErrorVisible] = useState(false);
   const [isReturnDateVisible, setReturnDateVisible] = useState(false);
   const [isTooltipVisible, setTooltipVisible] = useState(false);
   const tooltipRef = useRef(null);
@@ -29,6 +28,8 @@ const HeroContainer = () => {
     };
   }, []);  
 
+
+  // Form
   const [form, setForm] = useState({
     departure_airport_code: "",
     arrival_airport_code: "",
@@ -38,19 +39,44 @@ const HeroContainer = () => {
     travellers: [],
   });
 
-  const onSearchFlightsButtonClick = useCallback(() => {
-    const raw = {
-      departure_airport_code: form.departure_airport_code,
-      arrival_airport_code: form.arrival_airport_code,
-      departure_date: form.departure_date,
-      return_date: form.return_date,
-      trip_type: form.trip_type,
-      travellers: form.travellers,
-    };
-    console.log(raw);
-    // console.log(JSON.stringify());
-    // navigate(`/results-page/`);
-  }, [form, navigate]);
+  const validateForm = () => {
+    const {
+      departure_airport_code,
+      arrival_airport_code,
+      departure_date,
+      return_date,
+      trip_type,
+      travellers,
+    } = form;
+
+    if (
+      isEmpty(departure_airport_code) ||
+      isEmpty(arrival_airport_code) ||
+      isEmpty(departure_date) ||
+      travellers.length === 0
+    ) {
+      showError();
+      return false;
+    }
+
+    if (trip_type === "Roundtrip" && isEmpty(return_date)) {
+      showError();
+      return false;
+    }
+
+    return true;
+  };
+
+  const isEmpty = (value) => {
+    return value === "" || value === undefined || value === null;
+  };
+
+  const showError = () => {
+    setErrorVisible(true);
+    setTimeout(() => {
+      setErrorVisible(false);
+    }, 3000); // Hide the error message after 3 seconds
+  };
 
   const handleChange = useCallback((event) => {
     const { name, value } = event.target;
@@ -72,6 +98,8 @@ const HeroContainer = () => {
     }
   }, []);
 
+
+  // Select passenger
   const toggleTooltip = () => {
     setTooltipVisible(true);
   };
@@ -118,16 +146,62 @@ const HeroContainer = () => {
     return totalCount;
   };
   
+  // Search Flights
+  const onSearchFlightsButtonClick = useCallback(() => {
+    if (!validateForm()) {
+      return;
+    }
+
+    const payload = {
+      cabin_type_code: "Y",
+      carriers: [
+        {
+          airline_code: "",
+        },
+      ],
+      departing_arrival_from: "00:00",
+      departing_arrival_to: "23:00",
+      departing_departure_from: "00:00",
+      departing_departure_to: "23:00",
+      flights: [
+        {
+          departure_airport_code: form.departure_airport_code,
+          departure_city_code: form.departure_airport_code,
+          arrival_airport_code: form.arrival_airport_code,
+          arrival_city_code: form.arrival_airport_code,
+          departure_date: form.departure_date,
+        },
+      ],
+      is_personal_trip: false,
+      returning_arrival_from: "00:00",
+      returning_arrival_to: "23:00",
+      returning_departure_from: "00:00",
+      returning_departure_to: "23:00",
+      travellers: form.travellers,
+      trip_type_code: form.trip_type,
+      third_party: ["SQ"],
+    };
+
+    console.log(payload);
+    // navigate(`/results-page/`);
+  }, [form, navigate]);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
+
       <div className="self-stretch flex flex-col items-center justify-start text-center text-42xl text-primary-contrast font-baloo-bhai" >
         <div className="self-stretch relative h-[640px]">
           <div className="absolute w-full top-[0px] right-[0px] left-[0px] [background:linear-gradient(78.78deg,_#114f8b_5.2%,_#2a9ad7)] h-[639.91px]" />
+          {errorVisible && (
+            <Alert severity="error" onClose={() => setErrorVisible(false)} className="fixed top-5 left-1/2 transform -translate-x-1/2 w-full max-w-md mx-auto">
+              Please fill in all required fields.
+            </Alert>
+          )}
           <img
             className="absolute w-full top-[0.4px] right-[0px] left-[0px] max-w-full overflow-hidden h-[640px] object-cover"
             alt=""
             src="/banner--background1@2x.png"
-          />
+            />
         </div>
       </div>
       <div className="absolute top-[0px] left-[0px] w-full h-[640px] flex flex-col py-0 px-[140px] box-border items-center justify-center gap-[43px] md:pl-[30px] md:pr-[30px] md:box-border">
@@ -160,6 +234,7 @@ const HeroContainer = () => {
           </div>
           
           <div className="self-stretch flex flex-row items-start justify-start text-xs text-gray-300 md:flex-col">
+
             <div className="flex-1 flex flex-row p-[5px] items-start justify-start gap-[10px] md:w-full md:flex-[unset] md:self-stretch sm:flex-col">
               <AirportAutosuggest
                   value={form.departure_airport_code}
@@ -229,8 +304,6 @@ const HeroContainer = () => {
 
             </div>
           </div>
-
-
 
           <div className="self-stretch flex flex-row items-start justify-start text-xs text-gray-300 md:flex-col">
             <div className="flex flex-col p-[5px] items-center justify-center text-center text-mini text-primary-contrast md:w-full md:text-left">
