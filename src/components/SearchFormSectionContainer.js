@@ -11,179 +11,179 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useNavigate } from "react-router-dom";
 import AirportAutosuggest from '../components/AirportAutosuggest';
 import PassengerInput from '../components/PassengerInput';
-// import Api from "../config/api"
+import Api from "../config/api"
 
 const SearchFormSectionContainer = ({ titletext }) => {
-    // const api = new Api()
-    const navigate = useNavigate();
-    const [errorVisible, setErrorVisible] = useState(false);
-    const [isReturnDateVisible, setReturnDateVisible] = useState(false);
-    const [isTooltipVisible, setTooltipVisible] = useState(false);
-    const tooltipRef = useRef(null);
+  const api = new Api()
+  const navigate = useNavigate();
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [isReturnDateVisible, setReturnDateVisible] = useState(false);
+  const [isTooltipVisible, setTooltipVisible] = useState(false);
+  const tooltipRef = useRef(null);
+
+  useEffect(() => {
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, []);  
+
+  // Form
+  const [form, setForm] = useState({
+    departure_airport_code: "",
+    arrival_airport_code: "",
+    departure_date: new Date().toISOString().split("T")[0],
+    return_date: new Date().toISOString().split("T")[0],
+    trip_type: "Oneway",
+    travellers: [],
+  });
+
+  const validateForm = () => {
+    const {
+      departure_airport_code,
+      arrival_airport_code,
+      departure_date,
+      return_date,
+      trip_type,
+      travellers,
+    } = form;
+
+    if (
+      isEmpty(departure_airport_code) ||
+      isEmpty(arrival_airport_code) ||
+      isEmpty(departure_date) ||
+      travellers.length === 0
+    ) {
+      showError();
+      return false;
+    }
+
+    if (trip_type === "Roundtrip" && isEmpty(return_date)) {
+      showError();
+      return false;
+    }
+
+    return true;
+  };
+
+  const isEmpty = (value) => {
+    return value === "" || value === undefined || value === null;
+  };
+
+  const showError = () => {
+    setErrorVisible(true);
+    setTimeout(() => {
+      setErrorVisible(false);
+    }, 3000); // Hide the error message after 3 seconds
+  };
+
+  const handleChange = useCallback((event) => {
+    const { name, value } = event.target;
+    if (name === "trip_type") {
+      setReturnDateVisible(value === "Roundtrip");
+    } 
+    if (name === "departure_date" || name === "return_date") {
+      if(value != null){
+        // Handle date changes
+        const formattedDate = value.toISOString().split("T")[0];
+        setForm((prevForm) => ({
+          ...prevForm,
+          [name]: formattedDate,
+        }));
+      }
+    } else {
+      // Handle other input changes
+      setForm((prevForm) => ({ ...prevForm, [name]: value }));
+    }
+  }, []);
+
+
+  // Select passenger
+  const toggleTooltip = () => {
+    setTooltipVisible(true);
+  };
   
-    useEffect(() => {
-      document.addEventListener('click', handleOutsideClick);
-      return () => {
-        document.removeEventListener('click', handleOutsideClick);
-      };
-    }, []);  
+  const handleOutsideClick = (event) => {
+    if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+      setTooltipVisible(false);
+    }
+  };
   
-    // Form
-    const [form, setForm] = useState({
-      departure_airport_code: "",
-      arrival_airport_code: "",
-      departure_date: new Date().toISOString().split("T")[0],
-      return_date: new Date().toISOString().split("T")[0],
-      trip_type: "Oneway",
-      travellers: [],
+  const handlePassengerChange = (passengerType, count) => {
+    const updatedTravellers = form.travellers.filter((traveller) => traveller.passenger_type !== passengerType);
+  
+    for (let i = 0; i < count; i++) {
+      updatedTravellers.push({
+        first_name: "Unknown",
+        is_guest: true,
+        passenger_type: passengerType,
+      });
+    }
+  
+    setForm((prevForm) => ({
+      ...prevForm,
+      travellers: updatedTravellers,
+    }));
+  };
+
+  const getPassengerCount = () => {
+    const passengerCount = {};
+  
+    form.travellers.forEach((traveller) => {
+      passengerCount[traveller.passenger_type] = (passengerCount[traveller.passenger_type] || 0) + 1;
     });
   
-    const validateForm = () => {
-      const {
-        departure_airport_code,
-        arrival_airport_code,
-        departure_date,
-        return_date,
-        trip_type,
-        travellers,
-      } = form;
+    let totalCount = "";
+    Object.keys(passengerCount).forEach((passengerType, index) => {
+      totalCount += `${passengerCount[passengerType]} ${passengerType}`;
   
-      if (
-        isEmpty(departure_airport_code) ||
-        isEmpty(arrival_airport_code) ||
-        isEmpty(departure_date) ||
-        travellers.length === 0
-      ) {
-        showError();
-        return false;
+      if (index !== Object.keys(passengerCount).length - 1) {
+        totalCount += ", ";
       }
+    });
   
-      if (trip_type === "Roundtrip" && isEmpty(return_date)) {
-        showError();
-        return false;
-      }
+    return totalCount;
+  };
   
-      return true;
+  // Search Flights
+  const onSearchFlightsButtonClick = async() => {
+    if (!validateForm()) {
+      return;
+    }
+
+    const payload = {
+      cabin_type_code: "Y",
+      carriers: [
+        {
+          airline_code: "",
+        },
+      ],
+      departing_arrival_from: "00:00",
+      departing_arrival_to: "23:00",
+      departing_departure_from: "00:00",
+      departing_departure_to: "23:00",
+      flights: [
+        {
+          departure_airport_code: form.departure_airport_code,
+          departure_city_code: form.departure_airport_code,
+          arrival_airport_code: form.arrival_airport_code,
+          arrival_city_code: form.arrival_airport_code,
+          departure_date: form.departure_date,
+        },
+      ],
+      is_personal_trip: false,
+      returning_arrival_from: "00:00",
+      returning_arrival_to: "23:00",
+      returning_departure_from: "00:00",
+      returning_departure_to: "23:00",
+      travellers: form.travellers,
+      trip_type_code: form.trip_type,
+      third_party: ["SQ"],
     };
-  
-    const isEmpty = (value) => {
-      return value === "" || value === undefined || value === null;
-    };
-  
-    const showError = () => {
-      setErrorVisible(true);
-      setTimeout(() => {
-        setErrorVisible(false);
-      }, 3000); // Hide the error message after 3 seconds
-    };
-  
-    const handleChange = useCallback((event) => {
-      const { name, value } = event.target;
-      if (name === "trip_type") {
-        setReturnDateVisible(value === "Roundtrip");
-      } 
-      if (name === "departure_date" || name === "return_date") {
-        if(value != null){
-          // Handle date changes
-          const formattedDate = value.toISOString().split("T")[0];
-          setForm((prevForm) => ({
-            ...prevForm,
-            [name]: formattedDate,
-          }));
-        }
-      } else {
-        // Handle other input changes
-        setForm((prevForm) => ({ ...prevForm, [name]: value }));
-      }
-    }, []);
-  
-  
-    // Select passenger
-    const toggleTooltip = () => {
-      setTooltipVisible(true);
-    };
-    
-    const handleOutsideClick = (event) => {
-      if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
-        setTooltipVisible(false);
-      }
-    };
-    
-    const handlePassengerChange = (passengerType, count) => {
-      const updatedTravellers = form.travellers.filter((traveller) => traveller.passenger_type !== passengerType);
-    
-      for (let i = 0; i < count; i++) {
-        updatedTravellers.push({
-          first_name: "Unknown",
-          is_guest: true,
-          passenger_type: passengerType,
-        });
-      }
-    
-      setForm((prevForm) => ({
-        ...prevForm,
-        travellers: updatedTravellers,
-      }));
-    };
-  
-    const getPassengerCount = () => {
-      const passengerCount = {};
-    
-      form.travellers.forEach((traveller) => {
-        passengerCount[traveller.passenger_type] = (passengerCount[traveller.passenger_type] || 0) + 1;
-      });
-    
-      let totalCount = "";
-      Object.keys(passengerCount).forEach((passengerType, index) => {
-        totalCount += `${passengerCount[passengerType]} ${passengerType}`;
-    
-        if (index !== Object.keys(passengerCount).length - 1) {
-          totalCount += ", ";
-        }
-      });
-    
-      return totalCount;
-    };
-    
-    // Search Flights
-    const onSearchFlightsButtonClick = useCallback(() => {
-      if (!validateForm()) {
-        return;
-      }
-  
-      const payload = {
-        cabin_type_code: "Y",
-        carriers: [
-          {
-            airline_code: "",
-          },
-        ],
-        departing_arrival_from: "00:00",
-        departing_arrival_to: "23:00",
-        departing_departure_from: "00:00",
-        departing_departure_to: "23:00",
-        flights: [
-          {
-            departure_airport_code: form.departure_airport_code,
-            departure_city_code: form.departure_airport_code,
-            arrival_airport_code: form.arrival_airport_code,
-            arrival_city_code: form.arrival_airport_code,
-            departure_date: form.departure_date,
-          },
-        ],
-        is_personal_trip: false,
-        returning_arrival_from: "00:00",
-        returning_arrival_to: "23:00",
-        returning_departure_from: "00:00",
-        returning_departure_to: "23:00",
-        travellers: form.travellers,
-        trip_type_code: form.trip_type,
-        third_party: ["SQ"],
-      };
-  
-      console.log(payload);
-      navigate(`/results-page/`);
-    }, [form, navigate]);
+
+    const { data } = await api.post("integration/flight/search", payload);
+    navigate(`/results-page/?session=${data.session_id}`);
+  }
   
 
   return (

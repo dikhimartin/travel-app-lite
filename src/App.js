@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import ResultsPage from "./pages/ResultsPage";
-import List from "./pages/List";
+import Login from "./pages/Login";
 import { useEffect } from "react";
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
         title = "";
         metaDescription = "";
         break;
-      case "/list":
+      case "/login":
         title = "";
         metaDescription = "";
         break;
@@ -57,7 +57,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Homepage />} />
       <Route path="/results-page" element={<ResultsPage />} />
-      <Route path="/list" element={<List />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
   );
 }

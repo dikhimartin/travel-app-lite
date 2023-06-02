@@ -1,6 +1,5 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import SearchFormSectionContainer from "../components/SearchFormSectionContainer";
 import FilterContainer from "../components/FilterContainer";
 import FlightInfoContainer from "../components/FlightInfoContainer";
 import BookingContainer from "../components/BookingContainer";
