@@ -228,14 +228,12 @@ const SearchFormSectionContainer = ({ titletext }) => {
                 
                 <AirportAutosuggest
                     value={form.departure_airport_code}
-                    className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch mb-3"
                     onChange={(value) => handleChange({ target: { name: "departure_airport_code", value } })}
                     label="Departure"
                     />
 
                 <AirportAutosuggest
                   value={form.arrival_airport_code}
-                  className="self-stretch flex-1 sm:flex-[unset] sm:self-stretch mb-3"
                   onChange={(value) => handleChange({ target: { name: "arrival_airport_code", value } })}
                   label="Arrival"
                 />
