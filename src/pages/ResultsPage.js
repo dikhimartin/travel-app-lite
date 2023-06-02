@@ -64,7 +64,7 @@ const ResultsPage = () => {
           </div>
         </div>
       </header>
-      <div className="mb-20 self-stretch [background:linear-gradient(100.3deg,_#114f8b,_#2a9ad7)] flex flex-col items-start justify-start text-left text-42xl text-primary-contrast font-baloo-bhai">
+      {/* <div className="mb-20 self-stretch [background:linear-gradient(100.3deg,_#114f8b,_#2a9ad7)] flex flex-col items-start justify-start text-left text-42xl text-primary-contrast font-baloo-bhai">
         <div className="self-stretch relative h-[362px] sm:h-[480px]">
           <div className="absolute h-full w-full top-[0px] right-[0px] bottom-[0px] left-[0px] [background:linear-gradient(78.78deg,_#114f8b_5.2%,_#2a9ad7)]" />
           <img
@@ -74,7 +74,7 @@ const ResultsPage = () => {
           />
           <SearchFormSectionContainer titletext="Where are you off too?" />
         </div>
-      </div>
+      </div> */}
 
       <div className="self-stretch flex flex-row py-[50px] px-20 items-start justify-center lg:p-10 lg:box-border md:py-5 md:px-6 md:box-border">
         <FilterContainer />
