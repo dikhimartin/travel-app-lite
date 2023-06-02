@@ -64,7 +64,18 @@ const ResultsPage = () => {
           </div>
         </div>
       </header>
-      <SearchFormSectionContainer />
+      <div className="mb-20 self-stretch [background:linear-gradient(100.3deg,_#114f8b,_#2a9ad7)] flex flex-col items-start justify-start text-left text-42xl text-primary-contrast font-baloo-bhai">
+        <div className="self-stretch relative h-[362px] sm:h-[480px]">
+          <div className="absolute h-full w-full top-[0px] right-[0px] bottom-[0px] left-[0px] [background:linear-gradient(78.78deg,_#114f8b_5.2%,_#2a9ad7)]" />
+          <img
+            className="absolute h-full w-full top-[0.4px] right-[0px] bottom-[-0.4px] left-[0px] max-w-full overflow-hidden max-h-full object-cover"
+            alt=""
+            src="/banner-background1@2x.png"
+          />
+          <SearchFormSectionContainer />
+        </div>
+      </div>
+
       <div className="self-stretch flex flex-row py-[50px] px-20 items-start justify-center lg:p-10 lg:box-border md:py-5 md:px-6 md:box-border">
         <FilterContainer />
         <div className="flex-1 flex flex-row items-start justify-start gap-[24px] md:flex-col md:gap-[80]">
