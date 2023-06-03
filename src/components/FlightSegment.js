@@ -2,8 +2,6 @@ import React, { useMemo } from "react";
 
 const FlightSegment = ({
   flight,
-  price,
-  flightClass,
   propTextAlign,
 }) => {
   const arrNameStyle = useMemo(() => {
@@ -12,20 +10,21 @@ const FlightSegment = ({
     };
   }, [propTextAlign]);
 
+
   return (
     <>
       <div className="self-stretch rounded-md flex flex-col p-2.5 justify-start gap-[10px] text-left text-xs text-lightslategray font-inter border-[1px] border-solid border-whitesmoke-200">
        {flight.airlines.map((airlines, index) => {
+          const { routes } = airlines;
           let firstRoutes, lastRoute;
           if (index === 0) {
-            firstRoutes = airlines.routes[0];
-            lastRoute = airlines.routes[airlines.routes.length - 1];
+            firstRoutes = routes[0];
+            lastRoute = routes[airlines.routes.length - 1];
           }
           if (index === flight.airlines.length - 1) {
-            firstRoutes = airlines.routes[0];
-            lastRoute = airlines.routes[airlines.routes.length - 1];
+            firstRoutes = routes[0];
+            lastRoute = routes[airlines.routes.length - 1];
           }
-
 
           const departureDate = new Date(firstRoutes.departure_date);
           const arrivalDate = new Date(lastRoute.arrival_date);
@@ -36,6 +35,8 @@ const FlightSegment = ({
           const depDate = departureDate.toLocaleDateString("en", { day: "numeric", month: "short", timeZone: "UTC" });
           const arrDate = arrivalDate.toLocaleDateString("en", { day: "numeric", month: "short", timeZone: "UTC" });
 
+          const price = flight.cabins[0].fares[0].price_after_markup; 
+          const IDRPrice = `IDR ${price.toLocaleString("id-ID")}`; 
 
           const transit = (() => {
             let stop = airlines?.routes ? airlines.routes.length - 1 : 0;
@@ -67,7 +68,7 @@ const FlightSegment = ({
                   </div>
 
                   <div className="relative text-base leading-[24px] font-semibold text-gray-200 text-right">
-                    {price} 
+                    {index === 0 && <div>{IDRPrice}</div>}
                   </div>
                 </div>
 
@@ -107,7 +108,7 @@ const FlightSegment = ({
                       alt=""
                       src="/class-icon.svg"
                     />
-                    <div className="relative leading-[16px]">{flightClass}</div>
+                    <div className="relative leading-[16px]">{routes[0]?.cabin_type_name} ({routes[0]?.cabin_type_code})</div>
                   </div>
                 </div>
                 {index != flight.airlines.length - 1 && <div className="dashed-divider"></div>}
