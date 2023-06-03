@@ -5,9 +5,6 @@ const FilterContainer = () => {
     <div className="w-[253px] flex flex-col items-start justify-start gap-[39px] text-left text-xl text-dimgray-300 font-components-button-large lg:hidden">
       <div className="relative w-[228px] h-[47px]">
         <div className="absolute top-[0px] left-[0px] w-[228px] flex flex-col items-start justify-start gap-[24px]">
-          <div className="relative tracking-[0.26px] inline-block w-[219.41px]">
-            10 out of 177 Results
-          </div>
           <img className="relative w-[228px] h-px" alt="" src="/vector-2.svg" />
         </div>
       </div>

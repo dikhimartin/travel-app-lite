@@ -20,8 +20,8 @@ const FlightInfoContainer = () => {
       const searchParams = new URLSearchParams(window.location.search);
       const session = searchParams.get("session");
 
-      // const response = await api.get(`http://localhost:8000/api/v1/flight/search/${session}?page=${page}`);
-      const response = await api.get(`integration/flight/search/${session}?page=${page}&size=${10}&sort=compliant`);
+      const response = await api.get(`http://localhost:8000/api/v1/flight/search/${session}?page=${page}`);
+      // const response = await api.get(`integration/flight/search/${session}?page=${page}&size=${10}&sort=compliant`);
       const { items, total_pages, total, status } = response.data;
 
 
