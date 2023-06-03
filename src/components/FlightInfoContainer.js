@@ -80,6 +80,7 @@ const FlightInfoContainer = () => {
             <FlightSegment key={flight.id} flight={flight} />
           ))}
           <Pagination
+            className="mb-5"
             page={currentPage}
             count={totalPages}
             onChange={handlePageChange}
