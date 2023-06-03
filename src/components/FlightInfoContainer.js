@@ -8,21 +8,26 @@ const FlightInfoContainer = () => {
   const [flights, setFlights] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [fetchCount, setFetchCount] = useState(0);
   const [fetchStatus, setFetchStatus] = useState("");
   let interval;
 
   // Fetch available flights
-  const fetchAvailableFlights = async (page = 1, size = 5) => {
+  const fetchAvailableFlights = async (page = 1) => {
     try {
       const searchParams = new URLSearchParams(window.location.search);
       const session = searchParams.get("session");
 
-      const response = await api.get(`integration/flight/search/${session}?page=${page}&size=${size}`);
-      const { items, total_pages, status } = response.data;
+      // const response = await api.get(`http://localhost:8000/api/v1/flight/search/${session}?page=${page}`);
+      const response = await api.get(`integration/flight/search/${session}?page=${page}&size=${10}&sort=compliant`);
+      const { items, total_pages, total, status } = response.data;
+
+
       setFlights(items);
       setTotalPages(total_pages);
+      setTotalItems(total);
       
       setFetchStatus(status);
       setFetchCount((prevCount) => prevCount + 1);
@@ -63,7 +68,7 @@ const FlightInfoContainer = () => {
         {isLoading ? (
           <span>Loading...</span>
         ) : (
-          `${flights.length} out of ${totalPages * 10} Results`
+          `${flights.length} out of ${totalItems} Results`
         )}
       </div>
 
