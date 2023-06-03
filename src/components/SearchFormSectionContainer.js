@@ -183,10 +183,9 @@ const SearchFormSectionContainer = ({ titletext }) => {
     };
 
     const { data } = await api.post("integration/flight/search", payload);
-    navigate(`/results-page/?session=${data.session_id}`);
+    navigate(`/results-page?session=${data.session_id}`);
   }
   
-
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
