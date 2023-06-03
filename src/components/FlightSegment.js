@@ -85,7 +85,7 @@ const FlightSegment = ({
                       alt=""
                       src="/flight-icon.svg"
                       />
-                      <div className="absolute text-xs top-[65.45%] left-[13%] tracking-[0.21px] mq428small:text-smi">
+                      <div className="absolute text-xs top-[65.45%] left-[-4%] right-[-7%] tracking-[0.21px] mq428small:text-smi">
                           {airlines.total_string_duration} ({transit})
                       </div>        
                   </div>
